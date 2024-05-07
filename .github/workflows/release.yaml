@@ -52,7 +52,9 @@ jobs:
       - name: Setup pack 
         uses: buildpacks/github-actions/setup-pack@7fc3d673350db0fff960cc94a3b9b80e5b663ae2 # v5.0.0
       - name: Install cosign
-        uses: sigstore/cosign-installer@66dd3f388647c8d36a2b8b27371cce115a10e003 # main
+        uses: sigstore/cosign-installer@59acb6260d9c0ba8f4a2f9d9b48431a222b68e20 # v3.5.0
+        with:
+          cosign-release: 'v2.2.4' # optional
       - name: Install crane
         uses: imjasonh/setup-crane@5146f708a817ea23476677995bf2133943b9be0b # v0.1
       - name: Build and publish image
