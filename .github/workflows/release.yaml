@@ -37,7 +37,7 @@ jobs:
       IMAGE_URI: ghcr.io/${{ github.repository }}
       BUILDER: paketobuildpacks/builder:base
       BUILDPACK: paketo-buildpacks/nodejs
-      BUILDPACK_RUN_IMAGE: cgr.dev/chainguard/node:latest
+      BUILDPACK_RUN_IMAGE: ttl.sh/tuananh/node:2h
       BUILDPACK_SBOM_OUTPUT_DIR: sbom-output-dir
       BUILDPACK_SPDX_SBOM: "launch/paketo-buildpacks_yarn-install/launch-modules/sbom.spdx.json"
     steps:
