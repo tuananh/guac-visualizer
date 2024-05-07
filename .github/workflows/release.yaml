@@ -18,6 +18,8 @@ on:
   push:
     tags:
       - 'v*'
+    branches: # for testing
+        - 'custom-runtime-image'
 
 permissions:
   actions: read   # for detecting the Github Actions environment.
@@ -34,7 +36,8 @@ jobs:
     env:
       IMAGE_URI: ghcr.io/${{ github.repository }}
       BUILDER: paketobuildpacks/builder:base
-      BUILDPACK: paketo-buildpacks/nodejs 
+      BUILDPACK: paketo-buildpacks/nodejs
+      BUILDPACK_RUN_IMAGE: cgr.dev/chainguard/node:latest
       BUILDPACK_SBOM_OUTPUT_DIR: sbom-output-dir
       BUILDPACK_SPDX_SBOM: "launch/paketo-buildpacks_yarn-install/launch-modules/sbom.spdx.json"
     steps:
@@ -57,7 +60,12 @@ jobs:
         run: |
           #!/usr/bin/env bash
           set -euo pipefail
-          pack build ${IMAGE_URI}:${{ github.ref_name }} --builder ${BUILDER} --buildpack ${BUILDPACK} --publish --sbom-output-dir ${BUILDPACK_SBOM_OUTPUT_DIR}
+          pack build ${IMAGE_URI}:${{ github.ref_name }} \
+            --builder ${BUILDER} \
+            --buildpack ${BUILDPACK} \
+            --run-image ${BUILDPACK_RUN_IMAGE} \
+            --publish \
+            --sbom-output-dir ${BUILDPACK_SBOM_OUTPUT_DIR}
           echo "IMAGE_DIGEST=$(crane digest ${IMAGE_URI}:${{ github.ref_name }})" >> $GITHUB_OUTPUT
       - name: Sign and verify image
         run: |
